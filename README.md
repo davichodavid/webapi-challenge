@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+  I learned about express's ability to abstract routes. It also allows up to use middleware.
+
 - [ ] Describe Middleware?
+
+  Middleware functions have access to the request object. They are able to intercept a request and run before a crud operation is completed.
 
 - [ ] Describe a Resource?
 
+  A resource is a set of data that can be accessed through an endpoint.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+  Api returns a response with http status code .
+
 - [ ] How can we partition our application into sub-applications?
+
+  By abstracting endpoints and middleware into their own spaces.
 
 ## Project Setup
 
