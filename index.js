@@ -1,14 +1,81 @@
-/*
-play this: https://www.youtube.com/watch?v=d-diB65scQU
+const express = require("express");
+const server = express();
+server.use(express.json());
 
-Sing along:
+const actionModel = require('./data/helpers/actionModel');
+const projectModel = require("./data/helpers/projectModel");
 
-here's a little code I wrote, you might want to read it really slow, don't worry be happy
-in every line there may be trouble, but if you worry you make it double, don't worry, be happy
-ain't got no sense of what is REST? just concentrate on learning Express, don't worry, be happy
-your file is getting way too big, bring a Router and make it thin, don't worry, be crafty
-there is no data on that route, just write some code, you'll sort it out… don't worry, just API…
-I need this code, just don't know where, perhaps should make some middleware, don't worry, be happy
+/************* CRUD for Actions ********************/
+server.get('/actions/', (req, res) => {
+  actionModel.get()
+    .then(action => { res.status(200).json(action) })
+})
 
-Go code!
-*/
+server.get('/actions/:id', (req, res) => {
+  actionModel.get(req.params.id)
+    .then(action => res.status(200).json(action))
+    .catch(err => res.status(500).json({ success: false, err }))
+})
+
+server.post('/actions/', (req, res) => {
+  actionModel.insert({ ...req.body, project_id: req.params.id })
+    .then(action => res.status(200).json(action))
+    .catch(err => res.status(500).json({ success: false, err }));
+});
+
+server.put('/actions/:id', (req, res) => {
+  actionModel.update(req.params.id, req.body)
+    .then(action => res.status(200).json(action))
+    .catch(err => res.status(500).json({ success: false, err }));
+});
+
+server.delete('/actions/:id', (req, res) => {
+  actionModel.remove(req.params.id)
+    .then(action => res.status(204).json({ success: true }))
+    .catch(err => res.status(500).json({ success: false, err }));
+});
+
+/************* CRUD for Projects ********************/
+
+server.get('/projects', (req, res) => {
+  projectModel.get()
+    .then(project => { res.status(200).json(project) })
+})
+
+server.get('/projects/:id', (req, res) => {
+  projectModel.get(req.params.id)
+    .then(project => res.status(200).json(project))
+    .catch(err => res.status(500).json({ success: false, err }))
+})
+
+server.post('/actions/', (req, res) => {
+  projectModel.insert(req.body)
+    .then(project => res.status(200).json(project))
+    .catch(err => res.status(500).json({ success: false, err }));
+});
+
+server.put('/actions/:id', (req, res) => {
+  projectModel.update(req.params.id, req.body)
+    .then(project => res.status(200).json(project))
+    .catch(err => res.status(500).json({ success: false, err }));
+});
+
+server.delete('/actions/:id', (req, res) => {
+  projectModel.remove(req.params.id)
+    .then(action => res.status(204).json({ success: true }))
+    .catch(err => res.status(500).json({ success: false, err }));
+});
+
+server.get('/projects/:id/actions', (req, res) => {
+  projectModel.getProjectActions({ ...req.body, project_id: req.params.id })
+    .then(project => res.status(200).json(project))
+    .catch(err => res.status(500).json({ success: false, err }))
+})
+
+
+/************* Server Listen ********************/
+
+const port = process.env.PORT || 5000;
+server.listen(port, () => {
+  console.log(`Hellluurrrr from ${port}`);
+});
